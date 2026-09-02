@@ -1,4 +1,4 @@
-﻿# Stage 1: Build the React frontend
+# Stage 1: Build the React frontend
 FROM node:18-alpine AS frontend-builder
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
@@ -23,9 +23,9 @@ COPY backend/ ./backend/
 # Copy the built frontend from Stage 1
 COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
 
-# Expose port (Railway injects $PORT, but we default to 8000)
+# Expose port
 ENV PORT=8000
-EXPOSE \
+EXPOSE $PORT
 
 # Start the FastAPI server using Uvicorn
-CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port \"]
+CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port $PORT"]
